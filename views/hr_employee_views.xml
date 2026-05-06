@@ -5,9 +5,9 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
-            <!-- Place the checkbox inside the HR Settings page properly -->
-            <xpath expr="//field[@name='user_id']" position="before">
-                <field name="grant_portal_access" widget="boolean_toggle"/>
+            <!-- Place the checkbox before the Related User label so it stays in the group layout -->
+            <xpath expr="//label[@for='user_id']" position="before">
+                <field name="grant_portal_access"/>
             </xpath>
 
             <!-- Remove the domain restriction in the XML view -->
