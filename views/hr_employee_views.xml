@@ -5,10 +5,12 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
-            <!-- Remove the domain restriction in the XML view -->
+            <!-- Place the checkbox inside the HR Settings page properly -->
             <xpath expr="//field[@name='user_id']" position="before">
-                <field name="grant_portal_access"/>
+                <field name="grant_portal_access" widget="boolean_toggle"/>
             </xpath>
+
+            <!-- Remove the domain restriction in the XML view -->
             <xpath expr="//field[@name='user_id']" position="attributes">
                 <attribute name="domain">[]</attribute>
                 <attribute name="context">{'active_test': False, 'no_share': False, 'fill_company': True}</attribute>
