@@ -6,19 +6,21 @@ class HrEmployee(models.Model):
     # Super bypass: domain is empty, check_company is False, and we use a permissive domain in XML
     user_id = fields.Many2one('res.users', string='Related User', domain="['|', ('active', '=', True), ('active', '=', False)]", check_company=False)
 
+    grant_portal_access = fields.Boolean(string="Grant Portal Access", default=False)
+
     @api.model_create_multi
     def create(self, vals_list):
         employees = super().create(vals_list)
         for employee in employees:
-            if employee.work_email:
+            if employee.grant_portal_access and employee.work_email:
                 employee._create_portal_user_auto()
         return employees
 
     def write(self, vals):
         res = super().write(vals)
-        if 'work_email' in vals:
+        if 'grant_portal_access' in vals or 'work_email' in vals:
             for employee in self:
-                if employee.work_email:
+                if employee.grant_portal_access and employee.work_email:
                     employee._create_portal_user_auto()
         return res
 
