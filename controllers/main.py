@@ -1,6 +1,6 @@
 from odoo import http, _
 from odoo.http import request
-from odoo.addons.portal.controllers.portal import CustomerPortal, pager as portal_pager
+from odoo.addons.portal.controllers.portal import CustomerPortal
 import base64
 
 class EmployeePortal(CustomerPortal):
@@ -21,24 +21,32 @@ class EmployeePortal(CustomerPortal):
         if not employee:
             return request.redirect('/my')
         
-        if kw:
+        if http.request.httprequest.method == 'POST':
             # Handle profile update
-            values = {
-                'name': kw.get('name'),
-                'work_phone': kw.get('work_phone'),
-                'work_email': kw.get('work_email'),
-                'private_phone': kw.get('private_phone'),
-                'private_email': kw.get('private_email'),
-            }
+            values = {}
+            if kw.get('name'):
+                values['name'] = kw.get('name')
+            if kw.get('work_phone') is not None:
+                values['work_phone'] = kw.get('work_phone')
+            if kw.get('work_email') is not None:
+                values['work_email'] = kw.get('work_email')
+            if kw.get('private_phone') is not None:
+                values['private_phone'] = kw.get('private_phone')
+            if kw.get('private_email') is not None:
+                values['private_email'] = kw.get('private_email')
+            
             if 'image_1920' in request.httprequest.files:
                 file = request.httprequest.files['image_1920']
-                if file:
+                if file and file.filename:
                     values['image_1920'] = base64.b64encode(file.read())
             
-            employee.sudo().write(values)
+            if values:
+                employee.sudo().write(values)
             return request.redirect('/my/profile?success=1')
 
-        return request.render("All_in_one_employee_portal.portal_my_profile", {
+        values = {
             'employee': employee,
             'page_name': 'my_profile',
-        })
+            'success': kw.get('success'),
+        }
+        return request.render("All_in_one_employee_portal.portal_my_profile", values)
