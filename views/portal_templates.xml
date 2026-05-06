@@ -114,9 +114,5 @@
             </div>
         </xpath>
 
-        <!-- Hide the original portal docs to prevent duplication while maintaining compatibility -->
-        <xpath expr="//div[hasclass('o_portal_my_home')]" position="attributes">
-            <attribute name="class" add="d-none" separator=" "/>
-        </xpath>
     </template>
 </odoo>

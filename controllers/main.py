@@ -38,7 +38,7 @@ class EmployeePortal(CustomerPortal):
             employee.sudo().write(values)
             return request.redirect('/my/profile?success=1')
 
-        return request.render("employee_portal_ess.portal_my_profile", {
+        return request.render("All_in_one_employee_portal.portal_my_profile", {
             'employee': employee,
             'page_name': 'my_profile',
         })
