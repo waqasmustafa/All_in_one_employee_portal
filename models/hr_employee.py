@@ -12,5 +12,5 @@ class HrEmployee(models.Model):
         return {
             'attendance_status': 'checked_in' if self.attendance_state == 'checked_in' else 'checked_out',
             'leave_balance': self.show_leaves and self.allocation_count or 0,
-            'upcoming_tasks': self.env['project.task'].search_count([('user_ids', 'in', self.user_id.id), ('stage_id.is_closed', '=', False)]),
+            'upcoming_tasks': self.env['project.task'].search_count([('user_ids', 'in', self.user_id.id), ('state', 'not in', ['1_done', '1_canceled'])]),
         }
