@@ -1,114 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="portal_my_home" inherit_id="portal.portal_my_home" priority="100">
-        <xpath expr="//div[hasclass('o_portal_my_home')]" position="replace">
-            <div class="o_portal_my_home o_employee_portal_dashboard mt-4">
-                <div class="row g-4">
-                    <!-- Profile Tile -->
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <a href="/my/profile" class="o_portal_card shadow-sm border-0 text-decoration-none">
-                            <div class="card-body text-center p-4">
-                                <div class="icon-wrapper mb-3">
-                                    <i class="fa fa-user-circle-o fa-3x text-primary"></i>
+        <!-- Add our dashboard before the default portal docs -->
+        <xpath expr="//div[hasclass('o_portal_my_home')]" position="before">
+            <div class="o_employee_portal_dashboard mt-4 mb-5">
+                <div class="container">
+                    <div class="row g-4">
+                        <!-- Profile Tile -->
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <a href="/my/profile" class="o_portal_card shadow-sm border-0 text-decoration-none">
+                                <div class="card-body text-center p-4">
+                                    <div class="icon-wrapper mb-3">
+                                        <i class="fa fa-user-circle-o fa-3x text-primary"></i>
+                                    </div>
+                                    <h5 class="card-title text-dark">My Profile</h5>
+                                    <p class="card-text text-muted small">Personal Details</p>
                                 </div>
-                                <h5 class="card-title text-dark">My Profile</h5>
-                                <p class="card-text text-muted small">Personal Details</p>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Attendance Tile -->
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <a href="/my/attendance" class="o_portal_card shadow-sm border-0 text-decoration-none">
-                            <div class="card-body text-center p-4">
-                                <div class="icon-wrapper mb-3">
-                                    <i class="fa fa-clock-o fa-3x text-success"></i>
+                        <!-- Attendance Tile -->
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <a href="/my/attendance" class="o_portal_card shadow-sm border-0 text-decoration-none">
+                                <div class="card-body text-center p-4">
+                                    <div class="icon-wrapper mb-3">
+                                        <i class="fa fa-clock-o fa-3x text-success"></i>
+                                    </div>
+                                    <h5 class="card-title text-dark">Attendance</h5>
+                                    <p class="card-text text-muted small">Check In / Out</p>
                                 </div>
-                                <h5 class="card-title text-dark">Attendance</h5>
-                                <p class="card-text text-muted small">Check In / Out</p>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Time Off Tile -->
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <a href="/my/leaves" class="o_portal_card shadow-sm border-0 text-decoration-none">
-                            <div class="card-body text-center p-4">
-                                <div class="icon-wrapper mb-3">
-                                    <i class="fa fa-plane fa-3x text-warning"></i>
+                        <!-- Time Off Tile -->
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <a href="/my/leaves" class="o_portal_card shadow-sm border-0 text-decoration-none">
+                                <div class="card-body text-center p-4">
+                                    <div class="icon-wrapper mb-3">
+                                        <i class="fa fa-plane fa-3x text-warning"></i>
+                                    </div>
+                                    <h5 class="card-title text-dark">Time Off</h5>
+                                    <p class="card-text text-muted small">Requests &amp; Balance</p>
                                 </div>
-                                <h5 class="card-title text-dark">Time Off</h5>
-                                <p class="card-text text-muted small">Requests &amp; Balance</p>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Payroll Tile -->
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <a href="/my/payroll" class="o_portal_card shadow-sm border-0 text-decoration-none">
-                            <div class="card-body text-center p-4">
-                                <div class="icon-wrapper mb-3">
-                                    <i class="fa fa-money fa-3x text-info"></i>
+                        <!-- Payroll Tile -->
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <a href="/my/payroll" class="o_portal_card shadow-sm border-0 text-decoration-none">
+                                <div class="card-body text-center p-4">
+                                    <div class="icon-wrapper mb-3">
+                                        <i class="fa fa-money fa-3x text-info"></i>
+                                    </div>
+                                    <h5 class="card-title text-dark">Payroll</h5>
+                                    <p class="card-text text-muted small">Payslips &amp; History</p>
                                 </div>
-                                <h5 class="card-title text-dark">Payroll</h5>
-                                <p class="card-text text-muted small">Payslips &amp; History</p>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Tasks Tile -->
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <a href="/my/tasks" class="o_portal_card shadow-sm border-0 text-decoration-none">
-                            <div class="card-body text-center p-4">
-                                <div class="icon-wrapper mb-3">
-                                    <i class="fa fa-tasks fa-3x text-danger"></i>
+                        <!-- Tasks Tile -->
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <a href="/my/tasks" class="o_portal_card shadow-sm border-0 text-decoration-none">
+                                <div class="card-body text-center p-4">
+                                    <div class="icon-wrapper mb-3">
+                                        <i class="fa fa-tasks fa-3x text-danger"></i>
+                                    </div>
+                                    <h5 class="card-title text-dark">Tasks</h5>
+                                    <p class="card-text text-muted small">Assigned Work</p>
                                 </div>
-                                <h5 class="card-title text-dark">Tasks</h5>
-                                <p class="card-text text-muted small">Assigned Work</p>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Timesheets Tile -->
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <a href="/my/timesheets" class="o_portal_card shadow-sm border-0 text-decoration-none">
-                            <div class="card-body text-center p-4">
-                                <div class="icon-wrapper mb-3">
-                                    <i class="fa fa-calendar-check-o fa-3x text-secondary"></i>
+                        <!-- Timesheets Tile -->
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <a href="/my/timesheets" class="o_portal_card shadow-sm border-0 text-decoration-none">
+                                <div class="card-body text-center p-4">
+                                    <div class="icon-wrapper mb-3">
+                                        <i class="fa fa-calendar-check-o fa-3x text-secondary"></i>
+                                    </div>
+                                    <h5 class="card-title text-dark">Timesheets</h5>
+                                    <p class="card-text text-muted small">Log Hours</p>
                                 </div>
-                                <h5 class="card-title text-dark">Timesheets</h5>
-                                <p class="card-text text-muted small">Log Hours</p>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Expenses Tile -->
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <a href="/my/expenses" class="o_portal_card shadow-sm border-0 text-decoration-none">
-                            <div class="card-body text-center p-4">
-                                <div class="icon-wrapper mb-3">
-                                    <i class="fa fa-file-text-o fa-3x text-dark"></i>
+                        <!-- Expenses Tile -->
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <a href="/my/expenses" class="o_portal_card shadow-sm border-0 text-decoration-none">
+                                <div class="card-body text-center p-4">
+                                    <div class="icon-wrapper mb-3">
+                                        <i class="fa fa-file-text-o fa-3x text-dark"></i>
+                                    </div>
+                                    <h5 class="card-title text-dark">Expenses</h5>
+                                    <p class="card-text text-muted small">Submit Receipts</p>
                                 </div>
-                                <h5 class="card-title text-dark">Expenses</h5>
-                                <p class="card-text text-muted small">Submit Receipts</p>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
 
-                    <!-- Weekly Schedule Tile -->
-                    <div class="col-6 col-md-4 col-lg-3">
-                        <a href="/my/schedule" class="o_portal_card shadow-sm border-0 text-decoration-none">
-                            <div class="card-body text-center p-4">
-                                <div class="icon-wrapper mb-3">
-                                    <i class="fa fa-calendar fa-3x text-primary"></i>
+                        <!-- Weekly Schedule Tile -->
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <a href="/my/schedule" class="o_portal_card shadow-sm border-0 text-decoration-none">
+                                <div class="card-body text-center p-4">
+                                    <div class="icon-wrapper mb-3">
+                                        <i class="fa fa-calendar fa-3x text-primary"></i>
+                                    </div>
+                                    <h5 class="card-title text-dark">Schedule</h5>
+                                    <p class="card-text text-muted small">Shift Planning</p>
                                 </div>
-                                <h5 class="card-title text-dark">Schedule</h5>
-                                <p class="card-text text-muted small">Shift Planning</p>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+        </xpath>
+
+        <!-- Hide the original portal docs to prevent duplication while maintaining compatibility -->
+        <xpath expr="//div[hasclass('o_portal_my_home')]" position="attributes">
+            <attribute name="class" add="d-none" separator=" "/>
         </xpath>
     </template>
 </odoo>
