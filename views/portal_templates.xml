@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="portal_my_home" inherit_id="portal.portal_my_home" priority="100">
-        <xpath expr="//div[hasclass('o_portal_docs')]" position="replace">
-            <div class="o_employee_portal_dashboard mt-4">
+        <xpath expr="//div[hasclass('o_portal_my_home')]" position="replace">
+            <div class="o_portal_my_home o_employee_portal_dashboard mt-4">
                 <div class="row g-4">
                     <!-- Profile Tile -->
                     <div class="col-6 col-md-4 col-lg-3">
