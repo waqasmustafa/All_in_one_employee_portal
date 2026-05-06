@@ -7,7 +7,8 @@
         <field name="arch" type="xml">
             <!-- Remove the domain restriction in the XML view -->
             <xpath expr="//field[@name='user_id']" position="attributes">
-                <attribute name="domain">[('active', '=', True)]</attribute>
+                <attribute name="domain">[]</attribute>
+                <attribute name="context">{'active_test': False}</attribute>
             </xpath>
         </field>
     </record>
