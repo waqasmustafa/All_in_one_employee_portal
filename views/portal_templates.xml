@@ -38,7 +38,7 @@
                                     <i class="fa fa-plane fa-3x text-warning"></i>
                                 </div>
                                 <h5 class="card-title text-dark">Time Off</h5>
-                                <p class="card-text text-muted small">Requests & Balance</p>
+                                <p class="card-text text-muted small">Requests &amp; Balance</p>
                             </div>
                         </a>
                     </div>
@@ -51,7 +51,7 @@
                                     <i class="fa fa-money fa-3x text-info"></i>
                                 </div>
                                 <h5 class="card-title text-dark">Payroll</h5>
-                                <p class="card-text text-muted small">Payslips & History</p>
+                                <p class="card-text text-muted small">Payslips &amp; History</p>
                             </div>
                         </a>
                     </div>
