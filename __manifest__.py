@@ -15,6 +15,7 @@
         'security/security_rules.xml',
         'views/portal_templates.xml',
         'views/profile_templates.xml',
+        'views/hr_employee_views.xml',
     ],
     'assets': {
         'web.assets_frontend': [
