@@ -3,8 +3,8 @@ from odoo import models, fields, api
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
-    # Aggressively remove all restrictions to allow selecting Portal users
-    user_id = fields.Many2one('res.users', string='Related User', domain=[], check_company=False)
+    # Super bypass: domain is empty, check_company is False, and we use a permissive domain in XML
+    user_id = fields.Many2one('res.users', string='Related User', domain="['|', ('active', '=', True), ('active', '=', False)]", check_company=False)
 
     def get_portal_dashboard_stats(self):
         """ Return stats for the portal dashboard tiles. """
