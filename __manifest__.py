@@ -19,7 +19,7 @@
     ],
     'assets': {
         'web.assets_frontend': [
-            'employee_portal_ess/static/src/css/portal_dashboard.css',
+            'All_in_one_employee_portal/static/src/css/portal_dashboard.css',
         ],
     },
     'installable': True,
