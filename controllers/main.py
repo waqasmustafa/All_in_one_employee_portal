@@ -61,7 +61,6 @@ class EmployeePortal(CustomerPortal):
         if not employee:
             return request.redirect('/my')
         
-        # Get recent attendances (last 10)
         attendances = request.env['hr.attendance'].sudo().search([
             ('employee_id', '=', employee.id)
         ], limit=10, order='check_in desc')
@@ -85,3 +84,50 @@ class EmployeePortal(CustomerPortal):
             'check_in': attendance.check_in,
             'check_out': attendance.check_out,
         }
+
+    @http.route(['/my/leaves'], type='http', auth="user", website=True)
+    def portal_my_leaves(self, **kw):
+        employee = request.env.user.employee_id
+        if not employee:
+            return request.redirect('/my')
+        
+        # Get leave balances
+        leave_types = request.env['hr.leave.type'].sudo().search([
+            ('has_valid_allocation', '=', True)
+        ])
+        balances = leave_types.get_allocation_data(employee)
+        
+        # Get leave history
+        leaves = request.env['hr.leave'].sudo().search([
+            ('employee_id', '=', employee.id)
+        ], order='date_from desc')
+        
+        values = {
+            'employee': employee,
+            'balances': balances,
+            'leaves': leaves,
+            'leave_types': leave_types,
+            'page_name': 'leaves',
+            'success': kw.get('success'),
+            'error': kw.get('error'),
+        }
+        return request.render("All_in_one_employee_portal.portal_my_leaves", values)
+
+    @http.route(['/my/leaves/apply'], type='http', auth="user", methods=['POST'], website=True)
+    def portal_my_leaves_apply(self, **kw):
+        employee = request.env.user.employee_id
+        if not employee:
+            return request.redirect('/my')
+        
+        try:
+            request.env['hr.leave'].sudo().create({
+                'name': kw.get('name') or 'Leave Request',
+                'holiday_status_id': int(kw.get('holiday_status_id')),
+                'date_from': kw.get('date_from'),
+                'date_to': kw.get('date_to'),
+                'employee_id': employee.id,
+                'request_unit_hours': False,
+            })
+            return request.redirect('/my/leaves?success=1')
+        except Exception as e:
+            return request.redirect('/my/leaves?error=%s' % str(e))
