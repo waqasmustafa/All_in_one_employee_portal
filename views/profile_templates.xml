@@ -55,6 +55,16 @@
                                                     <input type="text" class="form-control" id="private_phone" name="private_phone" t-att-value="employee.private_phone"/>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="birthday" class="form-label">Date of Birth</label>
+                                                    <input type="date" class="form-control" id="birthday" name="birthday" t-att-value="employee.birthday"/>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="private_street" class="form-label">Private Address</label>
+                                                    <input type="text" class="form-control" id="private_street" name="private_street" t-att-value="employee.private_street" placeholder="Street, City, etc."/>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 

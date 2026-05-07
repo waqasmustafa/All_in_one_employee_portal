@@ -34,6 +34,10 @@ class EmployeePortal(CustomerPortal):
                 values['private_phone'] = kw.get('private_phone')
             if kw.get('private_email') is not None:
                 values['private_email'] = kw.get('private_email')
+            if kw.get('birthday'):
+                values['birthday'] = kw.get('birthday')
+            if kw.get('private_street') is not None:
+                values['private_street'] = kw.get('private_street')
             
             if 'image_1920' in request.httprequest.files:
                 file = request.httprequest.files['image_1920']
