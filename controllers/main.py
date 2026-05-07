@@ -198,3 +198,68 @@ class EmployeePortal(CustomerPortal):
             ('Content-Disposition', 'attachment; filename="%s.pdf"' % payslip.number)
         ]
         return request.make_response(pdf_content, headers=pdfhttpheaders)
+
+    @http.route(['/my/tasks'], type='http', auth="user", website=True)
+    def portal_my_tasks(self, **kw):
+        employee = request.env.user.employee_id
+        if not employee:
+            return request.redirect('/my')
+        
+        # Get tasks assigned to the employee's user
+        tasks = request.env['project.task'].sudo().search([
+            ('user_ids', 'in', [request.env.user.id])
+        ], order='create_date desc')
+        
+        values = {
+            'employee': employee,
+            'tasks': tasks,
+            'page_name': 'tasks',
+        }
+        return request.render("All_in_one_employee_portal.portal_my_tasks", values)
+
+    @http.route(['/my/timesheets'], type='http', auth="user", website=True)
+    def portal_my_timesheets(self, **kw):
+        employee = request.env.user.employee_id
+        if not employee:
+            return request.redirect('/my')
+        
+        # Get timesheet lines for the employee
+        timesheets = request.env['account.analytic.line'].sudo().search([
+            ('employee_id', '=', employee.id),
+            ('project_id', '!=', False)
+        ], limit=20, order='date desc')
+        
+        # Get employee's tasks for logging
+        tasks = request.env['project.task'].sudo().search([
+            ('user_ids', 'in', [request.env.user.id])
+        ])
+        
+        values = {
+            'employee': employee,
+            'timesheets': timesheets,
+            'tasks': tasks,
+            'page_name': 'timesheets',
+            'success': kw.get('success'),
+            'error': kw.get('error'),
+        }
+        return request.render("All_in_one_employee_portal.portal_my_timesheets", values)
+
+    @http.route(['/my/timesheets/log'], type='http', auth="user", methods=['POST'], website=True)
+    def portal_timesheets_log(self, **kw):
+        employee = request.env.user.employee_id
+        if not employee:
+            return request.redirect('/my')
+        
+        try:
+            task = request.env['project.task'].sudo().browse(int(kw.get('task_id')))
+            request.env['account.analytic.line'].sudo().create({
+                'name': kw.get('name') or 'Work log',
+                'project_id': task.project_id.id,
+                'task_id': task.id,
+                'employee_id': employee.id,
+                'date': kw.get('date') or fields.Date.today(),
+                'unit_amount': float(kw.get('unit_amount')),
+            })
+            return request.redirect('/my/timesheets?success=1')
+        except Exception as e:
+            return request.redirect('/my/timesheets?error=%s' % str(e))

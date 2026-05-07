@@ -414,4 +414,197 @@
             </div>
         </t>
     </template>
+
+    <!-- Tasks Page Template -->
+    <template id="portal_my_tasks" name="My Tasks">
+        <t t-call="portal.portal_layout">
+            <div class="container mt-4 mb-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="fw-bold mb-0">My Assigned Tasks</h2>
+                            <a href="/my/timesheets" class="btn btn-outline-primary px-4 py-2 shadow-sm fw-bold">
+                                <i class="fa fa-calendar-check-o me-2"></i> View Timesheets
+                            </a>
+                        </div>
+
+                        <!-- Tasks Table -->
+                        <div class="card shadow-sm border-0 overflow-hidden">
+                            <div class="card-header bg-white border-0 py-3">
+                                <h4 class="mb-0 fw-bold">Assigned Tasks</h4>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0 align-middle">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th class="ps-4">Task Name</th>
+                                                <th>Project</th>
+                                                <th>Deadline</th>
+                                                <th>Status</th>
+                                                <th class="pe-4 text-end">Progress</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="tasks" t-as="task">
+                                                <tr>
+                                                    <td class="ps-4">
+                                                        <span class="fw-bold text-dark" t-field="task.name"/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-field="task.project_id.name"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-if="task.date_deadline">
+                                                            <span t-field="task.date_deadline" t-options='{"widget": "date"}'/>
+                                                        </t>
+                                                        <t t-else="">-</t>
+                                                    </td>
+                                                    <td>
+                                                        <span t-attf-class="badge rounded-pill px-3 py-2 #{'bg-success' if task.stage_id.is_closed else 'bg-primary'}" t-field="task.stage_id.name"/>
+                                                    </td>
+                                                    <td class="pe-4 text-end">
+                                                        <div class="progress" style="height: 10px; min-width: 100px;">
+                                                            <div class="progress-bar bg-success" role="progressbar" t-attf-style="width: #{task.progress}%" t-att-aria-valuenow="task.progress" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                        <small class="text-muted"><t t-esc="int(task.progress)"/>%</small>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                            <t t-if="not tasks">
+                                                <tr>
+                                                    <td colspan="5" class="text-center py-5 text-muted">
+                                                        <i class="fa fa-tasks fa-3x mb-3 d-block opacity-25"></i>
+                                                        No assigned tasks found.
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Timesheets Page Template -->
+    <template id="portal_my_timesheets" name="My Timesheets">
+        <t t-call="portal.portal_layout">
+            <div class="container mt-4 mb-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12">
+                        <!-- Alert for success/error -->
+                        <div t-if="success" class="alert alert-success alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
+                            <i class="fa fa-check-circle me-2"></i> Timesheet logged successfully!
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div t-if="error" class="alert alert-danger alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
+                            <i class="fa fa-exclamation-circle me-2"></i> <t t-esc="error"/>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="fw-bold mb-0">My Timesheets</h2>
+                            <button type="button" class="btn btn-success px-4 py-2 shadow-sm fw-bold" data-bs-toggle="modal" data-bs-target="#logWorkModal">
+                                <i class="fa fa-plus me-2"></i> Log Work Hours
+                            </button>
+                        </div>
+
+                        <!-- Timesheet History Table -->
+                        <div class="card shadow-sm border-0 overflow-hidden">
+                            <div class="card-header bg-white border-0 py-3">
+                                <h4 class="mb-0 fw-bold">Recent Work Logs</h4>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0 align-middle">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th class="ps-4">Date</th>
+                                                <th>Task</th>
+                                                <th>Description</th>
+                                                <th class="pe-4 text-end">Hours</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="timesheets" t-as="ts">
+                                                <tr>
+                                                    <td class="ps-4">
+                                                        <span t-field="ts.date" t-options='{"widget": "date"}'/>
+                                                    </td>
+                                                    <td>
+                                                        <span t-field="ts.task_id.name"/>
+                                                    </td>
+                                                    <td>
+                                                        <span class="text-muted" t-field="ts.name"/>
+                                                    </td>
+                                                    <td class="pe-4 text-end">
+                                                        <span class="fw-bold text-dark" t-field="ts.unit_amount"/> hrs
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                            <t t-if="not timesheets">
+                                                <tr>
+                                                    <td colspan="4" class="text-center py-5 text-muted">
+                                                        <i class="fa fa-clock-o fa-3x mb-3 d-block opacity-25"></i>
+                                                        No timesheet entries found.
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Log Work Modal -->
+            <div class="modal fade" id="logWorkModal" tabindex="-1" aria-labelledby="logWorkModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                        <form action="/my/timesheets/log" method="post">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <div class="modal-header border-0 pb-0">
+                                <h4 class="modal-title fw-bold" id="logWorkModalLabel">Log Work Hours</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body p-4">
+                                <div class="mb-3">
+                                    <label class="form-label text-muted small">Select Task</label>
+                                    <select name="task_id" class="form-select" required="required">
+                                        <t t-foreach="tasks" t-as="t">
+                                            <option t-att-value="t.id" t-esc="'[%s] %s' % (t.project_id.name, t.name)"/>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted small">Date</label>
+                                        <input type="date" name="date" class="form-control" required="required" t-att-value="datetime.date.today().strftime('%Y-%m-%d')"/>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted small">Hours</label>
+                                        <input type="number" step="0.25" name="unit_amount" class="form-control" required="required" placeholder="0.00"/>
+                                    </div>
+                                </div>
+                                <div class="mb-0">
+                                    <label class="form-label text-muted small">Work Description</label>
+                                    <textarea name="name" class="form-control" rows="3" placeholder="What did you work on?" required="required"></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0 pt-0">
+                                <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-success px-4 shadow-sm fw-bold">Log Hours</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
 </odoo>
