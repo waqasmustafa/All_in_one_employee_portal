@@ -436,14 +436,13 @@
                             <div class="card-body p-0">
                                 <div class="table-responsive">
                                     <table class="table table-hover mb-0 align-middle">
-                                        <thead class="bg-light">
+                                        <thead class="bg-tasks-header">
                                             <tr>
                                                 <th class="ps-4">Task Name</th>
                                                 <th>Project</th>
                                                 <th>Assigned By</th>
                                                 <th>Deadline</th>
-                                                <th>Status</th>
-                                                <th class="pe-4 text-end">Progress</th>
+                                                <th class="pe-4 text-end">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -467,20 +466,14 @@
                                                         </t>
                                                         <t t-else="">-</t>
                                                     </td>
-                                                    <td>
-                                                        <span t-attf-class="badge rounded-pill px-3 py-2 #{'bg-success' if task.state == '1_done' else 'bg-primary'}" t-field="task.stage_id.name"/>
-                                                    </td>
                                                     <td class="pe-4 text-end">
-                                                        <div class="progress" style="height: 10px; min-width: 100px;">
-                                                            <div class="progress-bar bg-success" role="progressbar" t-attf-style="width: #{task.progress}%" t-att-aria-valuenow="task.progress" aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                        <small class="text-muted"><t t-esc="int(task.progress)"/>%</small>
+                                                        <span t-attf-class="badge rounded-pill px-3 py-2 #{'bg-success' if task.state == '1_done' else 'bg-primary'}" t-field="task.stage_id.name"/>
                                                     </td>
                                                 </tr>
                                             </t>
                                             <t t-if="not tasks">
                                                 <tr>
-                                                    <td colspan="6" class="text-center py-5 text-muted">
+                                                    <td colspan="5" class="text-center py-5 text-muted">
                                                         <i class="fa fa-tasks fa-3x mb-3 d-block opacity-25"></i>
                                                         No assigned tasks found.
                                                     </td>
@@ -521,7 +514,7 @@
                                 </div>
                                 <div class="d-flex gap-2">
                                     <!-- Action Buttons -->
-                                    <t t-if="task.state == '04_waiting_normal' or task.state == '01_in_progress'">
+                                    <t t-if="task.state != '1_done'">
                                         <form t-attf-action="/my/task/change_state/#{task.id}" method="post">
                                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                                             <input type="hidden" name="state" value="1_done"/>
@@ -530,12 +523,14 @@
                                             </button>
                                         </form>
                                     </t>
-                                    <t t-if="task.state == '04_waiting_normal' or task.state == '1_done'">
+                                    <t t-if="task.state == '1_done' or task.state == '04_waiting_normal'">
                                         <form t-attf-action="/my/task/change_state/#{task.id}" method="post">
                                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                                             <input type="hidden" name="state" value="01_in_progress"/>
                                             <button type="submit" class="btn btn-primary btn-lg px-4 py-2 shadow-sm fw-bold">
-                                                <i class="fa fa-play-circle me-2"></i> Start Task
+                                                <i class="fa fa-play-circle me-2"></i> 
+                                                <t t-if="task.state == '1_done'">Re-open Task</t>
+                                                <t t-else="">Start Task</t>
                                             </button>
                                         </form>
                                     </t>
@@ -554,7 +549,7 @@
                             <div class="card-body">
                                 <div class="task-description-content text-dark" style="font-size: 1.1rem; line-height: 1.6;">
                                     <t t-if="task.description">
-                                        <t t-raw="task.description"/>
+                                        <t t-out="task.description"/>
                                     </t>
                                     <t t-else="">
                                         <p class="text-muted italic">No description provided for this task.</p>
@@ -571,9 +566,6 @@
                             <div class="card-body p-4 bg-light">
                                 <t t-call="portal.message_thread">
                                     <t t-set="object" t-value="task"/>
-                                    <t t-set="token" t-value="task.access_token"/>
-                                    <t t-set="pid" t-value="pid"/>
-                                    <t t-set="hash" t-value="hash"/>
                                 </t>
                             </div>
                         </div>
@@ -602,7 +594,9 @@
                                     <li class="list-group-item d-flex justify-content-between align-items-center py-3 text-danger">
                                         <span class=""><i class="fa fa-calendar-times-o me-2"></i> Deadline</span>
                                         <span class="fw-bold">
-                                            <t t-if="task.date_deadline" t-field="task.date_deadline" t-options='{"widget": "date"}'/>
+                                            <t t-if="task.date_deadline">
+                                                <span t-field="task.date_deadline" t-options='{"widget": "date"}'/>
+                                            </t>
                                             <t t-else="">None</t>
                                         </span>
                                     </li>

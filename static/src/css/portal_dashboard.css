@@ -110,11 +110,14 @@ body {
     border: none !important;
 }
 
-.table thead th {
+.bg-tasks-header {
+    background-color: #e74a3b !important;
+}
+
+.bg-tasks-header th {
+    color: white !important;
+    font-weight: bold;
     text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    color: #858796;
 }
 
 /* Modal Styling */
