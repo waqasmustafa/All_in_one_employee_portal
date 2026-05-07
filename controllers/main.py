@@ -205,7 +205,6 @@ class EmployeePortal(CustomerPortal):
         if not employee:
             return request.redirect('/my')
         
-        # Search for tasks assigned to this employee via our new custom field
         tasks = request.env['project.task'].sudo().search([
             ('employee_id', '=', employee.id)
         ], order='create_date desc')
@@ -217,19 +216,54 @@ class EmployeePortal(CustomerPortal):
         }
         return request.render("All_in_one_employee_portal.portal_my_tasks", values)
 
+    @http.route(['/my/task/<int:task_id>'], type='http', auth="user", website=True)
+    def portal_my_task_detail(self, task_id, **kw):
+        employee = request.env.user.employee_id
+        if not employee:
+            return request.redirect('/my')
+        
+        task = request.env['project.task'].sudo().search([
+            ('id', '=', task_id),
+            ('employee_id', '=', employee.id)
+        ], limit=1)
+        
+        if not task:
+            return request.redirect('/my/tasks')
+        
+        values = {
+            'employee': employee,
+            'task': task,
+            'page_name': 'tasks',
+        }
+        return request.render("All_in_one_employee_portal.portal_my_task_detail", values)
+
+    @http.route(['/my/task/change_state/<int:task_id>'], type='http', auth="user", methods=['POST'], website=True)
+    def portal_my_task_change_state(self, task_id, state, **kw):
+        employee = request.env.user.employee_id
+        if not employee:
+            return request.redirect('/my')
+        
+        task = request.env['project.task'].sudo().search([
+            ('id', '=', task_id),
+            ('employee_id', '=', employee.id)
+        ], limit=1)
+        
+        if task:
+            task.sudo().write({'state': state})
+            
+        return request.redirect('/my/task/%s' % task_id)
+
     @http.route(['/my/timesheets'], type='http', auth="user", website=True)
     def portal_my_timesheets(self, **kw):
         employee = request.env.user.employee_id
         if not employee:
             return request.redirect('/my')
         
-        # Get timesheet lines for the employee
         timesheets = request.env['account.analytic.line'].sudo().search([
             ('employee_id', '=', employee.id),
             ('project_id', '!=', False)
         ], limit=20, order='date desc')
         
-        # Get employee's assigned tasks for logging
         tasks = request.env['project.task'].sudo().search([
             ('employee_id', '=', employee.id)
         ])

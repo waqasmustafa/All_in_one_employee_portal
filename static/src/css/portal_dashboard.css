@@ -1,110 +1,168 @@
-/* Portal Dashboard Modern Styling */
-
-/* Hide default portal content to avoid duplication, while keeping it in DOM for JS compatibility */
-.o_portal_my_home {
-    display: none !important;
+/* Employee Portal Dashboard Styles */
+:root {
+    --portal-primary: #4e73df;
+    --portal-success: #1cc88a;
+    --portal-info: #36b9cc;
+    --portal-warning: #f6c23e;
+    --portal-danger: #e74a3b;
+    --portal-dark: #5a5c69;
+    --portal-bg: #f8f9fc;
 }
 
-.o_employee_portal_dashboard .o_portal_card {
+body {
+    background-color: var(--portal-bg) !important;
+}
+
+.o_portal_card {
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    background: white;
+    border-radius: 15px !important;
     display: block;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    position: relative;
-    overflow: hidden;
 }
 
-.o_employee_portal_dashboard .o_portal_card:hover {
+.o_portal_card:hover {
     transform: translateY(-10px);
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f1f4ff 100%);
 }
 
-.o_employee_portal_dashboard .icon-wrapper {
+.icon-wrapper {
+    background: #f8f9fc;
     width: 80px;
     height: 80px;
     line-height: 80px;
-    margin: 0 auto;
-    background: #f8f9fa;
     border-radius: 50%;
+    margin: 0 auto;
     transition: all 0.3s ease;
 }
 
-.o_employee_portal_dashboard .o_portal_card:hover .icon-wrapper {
-    transform: scale(1.1) rotate(5deg);
-    background: #fff;
-}
-
-.o_employee_portal_dashboard .card-title {
-    font-weight: 700;
-    margin-bottom: 5px;
-    font-size: 1.1rem;
-}
-
-/* Animations */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.o_employee_portal_dashboard .col-6 {
-    animation: fadeInUp 0.6s ease backwards;
-}
-
-.o_employee_portal_dashboard .col-6:nth-child(1) { animation-delay: 0.1s; }
-.o_employee_portal_dashboard .col-6:nth-child(2) { animation-delay: 0.2s; }
-.o_employee_portal_dashboard .col-6:nth-child(3) { animation-delay: 0.3s; }
-.o_employee_portal_dashboard .col-6:nth-child(4) { animation-delay: 0.4s; }
-.o_employee_portal_dashboard .col-6:nth-child(5) { animation-delay: 0.5s; }
-.o_employee_portal_dashboard .col-6:nth-child(6) { animation-delay: 0.6s; }
-.o_employee_portal_dashboard .col-6:nth-child(7) { animation-delay: 0.7s; }
-.o_employee_portal_dashboard .col-6:nth-child(8) { animation-delay: 0.8s; }
-
-/* Attendance Page Styling */
-.o_portal_attendance_page .attendance-icon-large {
-    color: #f8f9fa;
-    display: inline-block;
+.o_portal_card:hover .icon-wrapper {
+    background: white;
+    transform: scale(1.1);
 }
 
 .animate-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: .7;
-        transform: scale(1.05);
-    }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); opacity: 0.8; }
+    100% { transform: scale(1); }
 }
 
-.o_portal_attendance_page .table thead th {
-    font-weight: 600;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #6c757d;
-    border-bottom: 2px solid #f8f9fa;
+/* Profile Image Hover */
+.profile-image-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
 }
 
-.o_portal_attendance_page .table tbody td {
-    padding: 1rem 0.75rem;
-    font-size: 0.95rem;
+.profile-image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
 }
 
-.o_portal_attendance_page .btn-lg:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+.profile-image-container:hover .profile-image-overlay {
+    opacity: 1;
+}
+
+/* Attendance Buttons */
+#o_portal_attendance_toggle_btn {
     transition: all 0.3s ease;
+}
+
+#o_portal_attendance_toggle_btn:active {
+    transform: scale(0.95);
+}
+
+/* Table Enhancements */
+.table {
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+.table tbody tr {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    border-radius: 10px;
+    transition: transform 0.2s ease;
+}
+
+.table tbody tr:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.table td, .table th {
+    border: none !important;
+}
+
+.table thead th {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: #858796;
+}
+
+/* Modal Styling */
+.modal-content {
+    border: none;
+}
+
+.form-control, .form-select {
+    border-radius: 10px;
+    padding: 10px 15px;
+    border: 1px solid #e3e6f0;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(78,115,223,0.1);
+    border-color: var(--portal-primary);
+}
+
+/* Task Detail Styles */
+.o_task_detail_page .breadcrumb-item a {
+    color: var(--portal-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.o_task_detail_page .card {
+    border-radius: 20px !important;
+}
+
+.task-description-content {
+    color: #444;
+}
+
+.task-description-content h1, .task-description-content h2 {
+    color: #333;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.task-description-content p {
+    margin-bottom: 1rem;
+}
+
+/* Progress bar styling */
+.progress {
+    background-color: #eaecf4;
+}
+
+.progress-bar {
+    border-radius: 6px;
 }
