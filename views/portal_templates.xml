@@ -468,7 +468,7 @@
                                                         <t t-else="">-</t>
                                                     </td>
                                                     <td>
-                                                        <span t-attf-class="badge rounded-pill px-3 py-2 #{'bg-success' if task.stage_id.is_closed else 'bg-primary'}" t-field="task.stage_id.name"/>
+                                                        <span t-attf-class="badge rounded-pill px-3 py-2 #{'bg-success' if task.state == '1_done' else 'bg-primary'}" t-field="task.stage_id.name"/>
                                                     </td>
                                                     <td class="pe-4 text-end">
                                                         <div class="progress" style="height: 10px; min-width: 100px;">
