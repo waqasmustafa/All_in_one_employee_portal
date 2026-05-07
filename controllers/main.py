@@ -1,4 +1,4 @@
-from odoo import http, _
+from odoo import http, _, fields
 from odoo.http import request
 from odoo.addons.portal.controllers.portal import CustomerPortal
 import base64
@@ -54,6 +54,24 @@ class EmployeePortal(CustomerPortal):
             'success': kw.get('success'),
         }
         return request.render("All_in_one_employee_portal.portal_my_profile", values)
+
+    @http.route(['/my/attendance'], type='http', auth="user", website=True)
+    def portal_my_attendance(self, **kw):
+        employee = request.env.user.employee_id
+        if not employee:
+            return request.redirect('/my')
+        
+        # Get recent attendances (last 10)
+        attendances = request.env['hr.attendance'].sudo().search([
+            ('employee_id', '=', employee.id)
+        ], limit=10, order='check_in desc')
+        
+        values = {
+            'employee': employee,
+            'attendances': attendances,
+            'page_name': 'attendance',
+        }
+        return request.render("All_in_one_employee_portal.portal_my_attendance", values)
 
     @http.route(['/my/attendance/toggle'], type='json', auth="user", methods=['POST'], website=True)
     def portal_attendance_toggle(self, latitude=None, longitude=None, **kw):

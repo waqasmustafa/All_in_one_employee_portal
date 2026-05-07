@@ -21,25 +21,18 @@
 
                         <!-- Attendance Tile -->
                         <div class="col-6 col-md-4 col-lg-3">
-                            <div class="o_portal_card shadow-sm border-0 text-decoration-none h-100">
-                                <div class="card-body text-center p-4 d-flex flex-column justify-content-between">
-                                    <div>
-                                        <div class="icon-wrapper mb-3">
-                                            <i class="fa fa-clock-o fa-3x text-success"></i>
-                                        </div>
-                                        <h5 class="card-title text-dark">Attendance</h5>
-                                        <p id="o_portal_attendance_status" class="card-text text-muted small mb-3">
-                                            <t t-if="dashboard_stats.get('attendance_status') == 'checked_in'">Checked In</t>
-                                            <t t-else="">Checked Out</t>
-                                        </p>
+                            <a href="/my/attendance" class="o_portal_card shadow-sm border-0 text-decoration-none">
+                                <div class="card-body text-center p-4">
+                                    <div class="icon-wrapper mb-3">
+                                        <i class="fa fa-clock-o fa-3x text-success"></i>
                                     </div>
-                                    <button id="o_portal_attendance_toggle_btn" 
-                                            t-attf-class="btn w-100 shadow-sm #{'btn-danger' if dashboard_stats.get('attendance_status') == 'checked_in' else 'btn-success'}">
-                                        <t t-if="dashboard_stats.get('attendance_status') == 'checked_in'">Check Out</t>
-                                        <t t-else="">Check In</t>
-                                    </button>
+                                    <h5 class="card-title text-dark">Attendance</h5>
+                                    <p class="card-text text-muted small">
+                                        <t t-if="dashboard_stats.get('attendance_status') == 'checked_in'">Currently In</t>
+                                        <t t-else="">Currently Out</t>
+                                    </p>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
                         <!-- Time Off Tile -->
@@ -123,6 +116,100 @@
                 </div>
             </div>
         </xpath>
+    </template>
 
+    <template id="portal_my_attendance" name="My Attendance">
+        <t t-call="portal.portal_layout">
+            <div class="container mt-4 mb-5 o_portal_attendance_page">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <!-- Check-in/out Action Card -->
+                        <div class="card shadow-sm border-0 mb-4 overflow-hidden">
+                            <div class="card-body p-5 text-center bg-white">
+                                <div class="mb-4">
+                                    <div class="attendance-icon-large mb-3">
+                                        <i t-attf-class="fa fa-clock-o fa-5x #{'text-success' if employee.attendance_state != 'checked_in' else 'text-danger'} animate-pulse"></i>
+                                    </div>
+                                    <h2 class="fw-bold">
+                                        <t t-if="employee.attendance_state == 'checked_in'">You are Checked In</t>
+                                        <t t-else="">You are Checked Out</t>
+                                    </h2>
+                                    <p class="text-muted">Recording your work hours with GPS location</p>
+                                </div>
+
+                                <div class="d-flex justify-content-center">
+                                    <button id="o_portal_attendance_toggle_btn" 
+                                            t-attf-class="btn btn-lg px-5 py-3 shadow-sm fw-bold #{'btn-danger' if employee.attendance_state == 'checked_in' else 'btn-success'}"
+                                            style="border-radius: 50px; min-width: 250px; font-size: 1.5rem;">
+                                        <i t-attf-class="fa #{'fa-sign-out' if employee.attendance_state == 'checked_in' else 'fa-sign-in'} me-2"></i>
+                                        <t t-if="employee.attendance_state == 'checked_in'">Check Out Now</t>
+                                        <t t-else="">Check In Now</t>
+                                    </button>
+                                </div>
+                                <div id="o_portal_attendance_status" class="mt-3 text-muted small">
+                                    <t t-if="employee.last_attendance_id and not employee.last_attendance_id.check_out">
+                                        Started at: <span t-field="employee.last_attendance_id.check_in" t-options='{"widget": "datetime", "format": "hh:mm a"}'/>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Attendance History Table -->
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0 fw-bold">Recent Attendance History</h4>
+                                <span class="badge bg-primary rounded-pill">Last 10 Records</span>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0 align-middle">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th class="ps-4">Date</th>
+                                                <th>Check In</th>
+                                                <th>Check Out</th>
+                                                <th class="text-center">Work Hours</th>
+                                                <th class="pe-4 text-end">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="attendance_history_body">
+                                            <t t-foreach="attendances" t-as="att">
+                                                <tr>
+                                                    <td class="ps-4 fw-bold text-dark">
+                                                        <span t-field="att.check_in" t-options='{"widget": "date"}'/>
+                                                    </td>
+                                                    <td>
+                                                        <span class="text-success"><i class="fa fa-sign-in me-1"></i> <span t-field="att.check_in" t-options='{"widget": "datetime", "format": "hh:mm a"}'/></span>
+                                                    </td>
+                                                    <td>
+                                                        <t t-if="att.check_out">
+                                                            <span class="text-danger"><i class="fa fa-sign-out me-1"></i> <span t-field="att.check_out" t-options='{"widget": "datetime", "format": "hh:mm a"}'/></span>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <span class="badge bg-success animate-pulse">Working...</span>
+                                                        </t>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <t t-if="att.worked_hours">
+                                                            <span class="fw-bold" t-esc="'%02d:%02d' % (int(att.worked_hours), int((att.worked_hours - int(att.worked_hours)) * 60))"/> hrs
+                                                        </t>
+                                                        <t t-else="">-</t>
+                                                    </td>
+                                                    <td class="pe-4 text-end">
+                                                        <t t-if="att.in_latitude">
+                                                            <i class="fa fa-map-marker text-primary" title="GPS Captured"></i>
+                                                        </t>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
     </template>
 </odoo>

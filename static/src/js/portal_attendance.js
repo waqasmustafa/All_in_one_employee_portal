@@ -3,36 +3,35 @@
 import publicWidget from "@web/legacy/js/public/public_widget";
 
 publicWidget.registry.PortalAttendance = publicWidget.Widget.extend({
-    selector: '.o_employee_portal_dashboard',
+    selector: '.o_portal_attendance_page',
     events: {
         'click #o_portal_attendance_toggle_btn': '_onToggleAttendance',
     },
 
     _onToggleAttendance: function (ev) {
         const btn = ev.currentTarget;
-        const statusText = document.getElementById('o_portal_attendance_status');
         
         btn.disabled = true;
-        btn.innerText = "Processing...";
+        btn.innerText = "Processing Location...";
 
         if ("geolocation" in navigator) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    this._submitAttendance(position.coords.latitude, position.coords.longitude, btn, statusText);
+                    this._submitAttendance(position.coords.latitude, position.coords.longitude, btn);
                 },
                 (error) => {
                     console.error("Geolocation error:", error);
-                    this._submitAttendance(null, null, btn, statusText);
+                    // Fallback: Submit without location if denied
+                    this._submitAttendance(null, null, btn);
                 },
                 { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
             );
         } else {
-            this._submitAttendance(null, null, btn, statusText);
+            this._submitAttendance(null, null, btn);
         }
     },
 
-    _submitAttendance: function (lat, long, btn, statusText) {
-        // Use standard fetch to avoid Odoo dependency issues in portal
+    _submitAttendance: function (lat, long, btn) {
         fetch('/my/attendance/toggle', {
             method: 'POST',
             headers: {
@@ -48,28 +47,18 @@ publicWidget.registry.PortalAttendance = publicWidget.Widget.extend({
         })
         .then(response => response.json())
         .then(data => {
-            const result = data.result;
-            if (result && result.status) {
-                if (result.status === 'checked_in') {
-                    btn.innerText = "Check Out";
-                    btn.classList.remove('btn-success');
-                    btn.classList.add('btn-danger');
-                    statusText.innerText = "Checked In";
-                } else {
-                    btn.innerText = "Check In";
-                    btn.classList.remove('btn-danger');
-                    btn.classList.add('btn-success');
-                    statusText.innerText = "Checked Out";
-                }
-            } else if (result && result.error) {
-                alert(result.error);
+            if (data.result && !data.result.error) {
+                // Success: Reload page to show new record in table
+                location.reload();
+            } else if (data.result && data.result.error) {
+                alert(data.result.error);
+                btn.disabled = false;
+                btn.innerText = "Try Again";
             }
         })
         .catch(err => {
             console.error("Attendance failed:", err);
-            alert("Something went wrong. Please try again.");
-        })
-        .finally(() => {
+            alert("Connection error. Please try again.");
             btn.disabled = false;
         });
     },

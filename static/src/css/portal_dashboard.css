@@ -67,3 +67,44 @@
 .o_employee_portal_dashboard .col-6:nth-child(6) { animation-delay: 0.6s; }
 .o_employee_portal_dashboard .col-6:nth-child(7) { animation-delay: 0.7s; }
 .o_employee_portal_dashboard .col-6:nth-child(8) { animation-delay: 0.8s; }
+
+/* Attendance Page Styling */
+.o_portal_attendance_page .attendance-icon-large {
+    color: #f8f9fa;
+    display: inline-block;
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: .7;
+        transform: scale(1.05);
+    }
+}
+
+.o_portal_attendance_page .table thead th {
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.o_portal_attendance_page .table tbody td {
+    padding: 1rem 0.75rem;
+    font-size: 0.95rem;
+}
+
+.o_portal_attendance_page .btn-lg:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease;
+}
