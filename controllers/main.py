@@ -152,3 +152,22 @@ class EmployeePortal(CustomerPortal):
             return request.redirect('/my/leaves?success=1')
         except Exception as e:
             return request.redirect('/my/leaves?error=%s' % str(e))
+
+    @http.route(['/my/payroll'], type='http', auth="user", website=True)
+    def portal_my_payroll(self, **kw):
+        employee = request.env.user.employee_id
+        if not employee:
+            return request.redirect('/my')
+        
+        # Get payslips for the employee
+        payslips = request.env['hr.payslip'].sudo().search([
+            ('employee_id', '=', employee.id),
+            ('state', 'in', ['done', 'paid'])
+        ], order='date_from desc')
+        
+        values = {
+            'employee': employee,
+            'payslips': payslips,
+            'page_name': 'payroll',
+        }
+        return request.render("All_in_one_employee_portal.portal_my_payroll", values)
