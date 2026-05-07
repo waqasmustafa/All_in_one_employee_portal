@@ -274,8 +274,8 @@
                                                     <td class="ps-4">
                                                         <span class="fw-bold text-dark" t-field="leave.holiday_status_id.name"/>
                                                     </td>
-                                                    <td><span t-field="leave.date_from" t-options='{"widget": "date"}'/></td>
-                                                    <td><span t-field="leave.date_to" t-options='{"widget": "date"}'/></td>
+                                                    <td><span t-field="leave.request_date_from" t-options='{"widget": "date"}'/></td>
+                                                    <td><span t-field="leave.request_date_to" t-options='{"widget": "date"}'/></td>
                                                     <td><span t-field="leave.number_of_days"/> Days</td>
                                                     <td>
                                                         <span t-attf-class="badge rounded-pill px-3 py-2 #{'bg-success' if leave.state == 'validate' else 'bg-warning' if leave.state == 'confirm' else 'bg-danger' if leave.state == 'refuse' else 'bg-secondary'}" t-field="leave.state"/>

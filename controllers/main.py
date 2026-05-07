@@ -144,8 +144,8 @@ class EmployeePortal(CustomerPortal):
             request.env['hr.leave'].sudo().create({
                 'name': kw.get('name') or 'Leave Request',
                 'holiday_status_id': int(kw.get('holiday_status_id')),
-                'date_from': kw.get('date_from'),
-                'date_to': kw.get('date_to'),
+                'request_date_from': kw.get('date_from'),
+                'request_date_to': kw.get('date_to'),
                 'employee_id': employee.id,
                 'request_unit_hours': False,
             })
