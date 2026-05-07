@@ -440,6 +440,7 @@
                                             <tr>
                                                 <th class="ps-4">Task Name</th>
                                                 <th>Project</th>
+                                                <th>Assigned By</th>
                                                 <th>Deadline</th>
                                                 <th>Status</th>
                                                 <th class="pe-4 text-end">Progress</th>
@@ -453,6 +454,12 @@
                                                     </td>
                                                     <td>
                                                         <span t-field="task.project_id.name"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-if="task.user_ids">
+                                                            <span t-esc="task.user_ids[0].name"/>
+                                                        </t>
+                                                        <t t-else="">-</t>
                                                     </td>
                                                     <td>
                                                         <t t-if="task.date_deadline">

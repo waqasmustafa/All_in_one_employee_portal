@@ -205,9 +205,9 @@ class EmployeePortal(CustomerPortal):
         if not employee:
             return request.redirect('/my')
         
-        # Get tasks assigned to the employee's user
+        # Search for tasks assigned to this employee via our new custom field
         tasks = request.env['project.task'].sudo().search([
-            ('user_ids', 'in', [request.env.user.id])
+            ('employee_id', '=', employee.id)
         ], order='create_date desc')
         
         values = {
@@ -229,9 +229,9 @@ class EmployeePortal(CustomerPortal):
             ('project_id', '!=', False)
         ], limit=20, order='date desc')
         
-        # Get employee's tasks for logging
+        # Get employee's assigned tasks for logging
         tasks = request.env['project.task'].sudo().search([
-            ('user_ids', 'in', [request.env.user.id])
+            ('employee_id', '=', employee.id)
         ])
         
         values = {

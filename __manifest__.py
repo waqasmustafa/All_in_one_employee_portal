@@ -18,6 +18,7 @@
         'views/profile_templates.xml',
         'views/hr_employee_views.xml',
         'views/hr_attendance_views.xml',
+        'views/project_task_views.xml',
     ],
     'assets': {
         'web.assets_frontend': [
