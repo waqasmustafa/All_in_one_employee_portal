@@ -96,10 +96,16 @@ class EmployeePortal(CustomerPortal):
             ('active', '=', True)
         ])
         
-        # Get allocation data correctly for Odoo 18
+        # Get allocation data correctly for Odoo 18 (Handling both list and tuple)
         balances_data = leave_types.get_allocation_data(employee)
-        balances = balances_data.get(employee, []) if isinstance(balances_data, dict) else []
+        emp_balances = balances_data.get(employee, [])
         
+        # If Odoo returns a tuple (data, total), take only the data list
+        if isinstance(emp_balances, tuple):
+            balances = emp_balances[0]
+        else:
+            balances = emp_balances
+            
         # Get leave history
         leaves = request.env['hr.leave'].sudo().search([
             ('employee_id', '=', employee.id)
