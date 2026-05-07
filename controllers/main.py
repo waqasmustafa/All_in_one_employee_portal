@@ -91,11 +91,13 @@ class EmployeePortal(CustomerPortal):
         if not employee:
             return request.redirect('/my')
         
-        # Get leave balances
+        # Get all active leave types available for the employee
         leave_types = request.env['hr.leave.type'].sudo().search([
-            ('has_valid_allocation', '=', True)
+            ('active', '=', True)
         ])
-        balances = leave_types.get_allocation_data(employee)
+        
+        # Get allocation data for this specific employee
+        balances = leave_types.get_allocation_data(employee).get(employee.id, [])
         
         # Get leave history
         leaves = request.env['hr.leave'].sudo().search([
