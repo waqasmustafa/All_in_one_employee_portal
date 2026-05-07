@@ -13,6 +13,7 @@
     'data': [
         'security/ir.model.access.csv',
         'security/security_rules.xml',
+        'security/ir_rule.xml',
         'views/portal_templates.xml',
         'views/profile_templates.xml',
         'views/hr_employee_views.xml',
