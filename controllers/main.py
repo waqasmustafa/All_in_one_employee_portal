@@ -91,13 +91,14 @@ class EmployeePortal(CustomerPortal):
         if not employee:
             return request.redirect('/my')
         
-        # Get all active leave types available for the employee
+        # Get all active leave types
         leave_types = request.env['hr.leave.type'].sudo().search([
             ('active', '=', True)
         ])
         
-        # Get allocation data for this specific employee
-        balances = leave_types.get_allocation_data(employee).get(employee.id, [])
+        # Get allocation data correctly for Odoo 18
+        balances_data = leave_types.get_allocation_data(employee)
+        balances = balances_data.get(employee, []) if isinstance(balances_data, dict) else []
         
         # Get leave history
         leaves = request.env['hr.leave'].sudo().search([
