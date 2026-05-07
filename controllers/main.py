@@ -54,3 +54,16 @@ class EmployeePortal(CustomerPortal):
             'success': kw.get('success'),
         }
         return request.render("All_in_one_employee_portal.portal_my_profile", values)
+
+    @http.route(['/my/attendance/toggle'], type='json', auth="user", methods=['POST'], website=True)
+    def portal_attendance_toggle(self, latitude=None, longitude=None, **kw):
+        employee = request.env.user.employee_id
+        if not employee:
+            return {'error': 'Employee not found'}
+        
+        attendance = employee.action_portal_attendance_toggle(latitude, longitude)
+        return {
+            'status': employee.attendance_state,
+            'check_in': attendance.check_in,
+            'check_out': attendance.check_out,
+        }

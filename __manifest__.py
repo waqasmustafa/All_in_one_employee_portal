@@ -16,10 +16,12 @@
         'views/portal_templates.xml',
         'views/profile_templates.xml',
         'views/hr_employee_views.xml',
+        'views/hr_attendance_views.xml',
     ],
     'assets': {
         'web.assets_frontend': [
             'All_in_one_employee_portal/static/src/css/portal_dashboard.css',
+            'All_in_one_employee_portal/static/src/js/portal_attendance.js',
         ],
     },
     'installable': True,

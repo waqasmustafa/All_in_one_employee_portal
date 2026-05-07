@@ -43,6 +43,34 @@ class HrEmployee(models.Model):
             # Link the user to the employee
             self.sudo().user_id = user.id
 
+    def action_portal_attendance_toggle(self, latitude=None, longitude=None):
+        """ Toggle attendance for the employee via portal with GPS coordinates. """
+        self.ensure_one()
+        action_date = fields.Datetime.now()
+        
+        if self.attendance_state != 'checked_in':
+            # Check-in
+            attendance = self.env['hr.attendance'].sudo().create({
+                'employee_id': self.id,
+                'check_in': action_date,
+                'in_latitude': latitude,
+                'in_longitude': longitude,
+            })
+            return attendance
+        else:
+            # Check-out
+            attendance = self.env['hr.attendance'].sudo().search([
+                ('employee_id', '=', self.id),
+                ('check_out', '=', False)
+            ], limit=1, order='check_in desc')
+            if attendance:
+                attendance.sudo().write({
+                    'check_out': action_date,
+                    'out_latitude': latitude,
+                    'out_longitude': longitude,
+                })
+            return attendance
+
     def get_portal_dashboard_stats(self):
         """ Return stats for the portal dashboard tiles. """
         self.ensure_one()

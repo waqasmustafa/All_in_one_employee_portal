@@ -21,15 +21,25 @@
 
                         <!-- Attendance Tile -->
                         <div class="col-6 col-md-4 col-lg-3">
-                            <a href="/my/attendance" class="o_portal_card shadow-sm border-0 text-decoration-none">
-                                <div class="card-body text-center p-4">
-                                    <div class="icon-wrapper mb-3">
-                                        <i class="fa fa-clock-o fa-3x text-success"></i>
+                            <div class="o_portal_card shadow-sm border-0 text-decoration-none h-100">
+                                <div class="card-body text-center p-4 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <div class="icon-wrapper mb-3">
+                                            <i class="fa fa-clock-o fa-3x text-success"></i>
+                                        </div>
+                                        <h5 class="card-title text-dark">Attendance</h5>
+                                        <p id="o_portal_attendance_status" class="card-text text-muted small mb-3">
+                                            <t t-if="dashboard_stats.get('attendance_status') == 'checked_in'">Checked In</t>
+                                            <t t-else="">Checked Out</t>
+                                        </p>
                                     </div>
-                                    <h5 class="card-title text-dark">Attendance</h5>
-                                    <p class="card-text text-muted small">Check In / Out</p>
+                                    <button id="o_portal_attendance_toggle_btn" 
+                                            t-attf-class="btn w-100 shadow-sm #{'btn-danger' if dashboard_stats.get('attendance_status') == 'checked_in' else 'btn-success'}">
+                                        <t t-if="dashboard_stats.get('attendance_status') == 'checked_in'">Check Out</t>
+                                        <t t-else="">Check In</t>
+                                    </button>
                                 </div>
-                            </a>
+                            </div>
                         </div>
 
                         <!-- Time Off Tile -->
