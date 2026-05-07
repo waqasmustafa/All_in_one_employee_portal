@@ -171,3 +171,30 @@ class EmployeePortal(CustomerPortal):
             'page_name': 'payroll',
         }
         return request.render("All_in_one_employee_portal.portal_my_payroll", values)
+
+    @http.route(['/my/payslip/download/<int:payslip_id>'], type='http', auth="user", website=True)
+    def portal_payslip_download(self, payslip_id, **kw):
+        employee = request.env.user.employee_id
+        if not employee:
+            return request.redirect('/my')
+        
+        # Search for the payslip belonging to this employee
+        payslip = request.env['hr.payslip'].sudo().search([
+            ('id', '=', payslip_id),
+            ('employee_id', '=', employee.id)
+        ], limit=1)
+        
+        if not payslip:
+            return request.redirect('/my/payroll')
+
+        # Generate the PDF report using sudo to bypass security restrictions
+        pdf_content, content_type = request.env['ir.actions.report'].sudo()._render_qweb_pdf(
+            'hr_payroll.action_report_payslip', [payslip.id]
+        )
+        
+        pdfhttpheaders = [
+            ('Content-Type', 'application/pdf'),
+            ('Content-Length', len(pdf_content)),
+            ('Content-Disposition', 'attachment; filename="%s.pdf"' % payslip.number)
+        ]
+        return request.make_response(pdf_content, headers=pdfhttpheaders)
