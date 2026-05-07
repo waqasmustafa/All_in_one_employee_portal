@@ -390,7 +390,7 @@
                                                         <span t-attf-class="badge rounded-pill px-3 py-2 #{'bg-success' if slip.state in ['done', 'paid'] else 'bg-warning'}" t-field="slip.state"/>
                                                     </td>
                                                     <td class="pe-4 text-end">
-                                                        <a t-attf-href="/report/pdf/hr_payroll.report_payslip/#{slip.id}" target="_blank" class="btn btn-sm btn-outline-primary rounded-circle" title="Download PDF">
+                                                        <a t-attf-href="/report/pdf/hr_payroll.action_report_payslip/#{slip.id}" target="_blank" class="btn btn-sm btn-outline-primary rounded-circle" title="Download PDF">
                                                             <i class="fa fa-download"></i>
                                                         </a>
                                                     </td>
