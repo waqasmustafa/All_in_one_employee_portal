@@ -472,7 +472,11 @@
                                                         <t t-else="">-</t>
                                                     </td>
                                                     <td class="pe-4 text-end">
-                                                        <span t-attf-class="badge rounded-pill px-3 py-2 #{'bg-success' if task.state == '1_done' else 'bg-primary'}" t-field="task.stage_id.name"/>
+                                                        <span t-attf-class="badge rounded-pill px-3 py-2 #{'bg-success' if task.state == '1_done' else 'bg-info' if task.is_task_started else 'bg-primary'}">
+                                                            <t t-if="task.state == '1_done'">Done</t>
+                                                            <t t-elif="task.is_task_started">In Progress</t>
+                                                            <t t-else="">New</t>
+                                                        </span>
                                                     </td>
                                                 </tr>
                                             </t>
@@ -550,7 +554,7 @@
                                 <i class="fa fa-play-circle fa-3x mb-3 text-white"></i>
                                 <h5 class="fw-bold text-white">Ready to Start?</h5>
                                 <p class="small opacity-75">Click start to begin tracking your time on this task.</p>
-                                <a t-attf-href="/my/task/start/#{task.id}" class="btn btn-light btn-lg rounded-pill px-5 fw-bold text-danger mt-2 shadow-sm border-0">
+                                <a t-attf-href="/my/task/start/#{task.id}" class="btn btn-success btn-lg rounded-pill px-5 fw-bold mt-2 shadow-sm border-0">
                                     <i class="fa fa-play me-2"/> START TASK
                                 </a>
                             </div>
@@ -572,9 +576,14 @@
                                 <i class="fa fa-check-circle fa-3x mb-3 text-white"></i>
                                 <h5 class="fw-bold text-white">Task Completed</h5>
                                 <p class="small opacity-75">This task has been marked as finished.</p>
-                                <a t-attf-href="/my/task/reopen/#{task.id}" class="btn btn-light text-danger fw-bold rounded-pill px-4 mt-2 shadow-sm">
-                                    <i class="fa fa-refresh me-1"/> Re-open Task
+                                <a t-attf-href="/my/task/reopen/#{task.id}" class="btn btn-success btn-lg rounded-pill px-5 fw-bold mt-2 shadow-sm border-0">
+                                    <i class="fa fa-refresh me-2"/> Re-open Task
                                 </a>
+                                <div class="mt-3">
+                                    <a href="/my/timesheets" class="btn btn-link text-white text-decoration-none small opacity-75 p-0">
+                                        <i class="fa fa-calendar-check-o me-1"/> View Timesheets
+                                    </a>
+                                </div>
                             </div>
 
                             <hr class="border-white opacity-25 my-4"/>
