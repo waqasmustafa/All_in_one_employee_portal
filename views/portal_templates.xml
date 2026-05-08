@@ -116,6 +116,11 @@
                 </div>
             </div>
         </xpath>
+
+        <!-- Hide default Odoo portal document entries -->
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="attributes">
+            <attribute name="class" add="d-none" separator=" "/>
+        </xpath>
     </template>
 
     <!-- Attendance Page Template -->
