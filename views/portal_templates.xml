@@ -572,7 +572,7 @@
                                 <i class="fa fa-check-circle fa-3x mb-3 text-white"></i>
                                 <h5 class="fw-bold text-white">Task Completed</h5>
                                 <p class="small opacity-75">This task has been marked as finished.</p>
-                                <a t-attf-href="/my/task/reopen/#{task.id}" class="btn btn-outline-light btn-sm rounded-pill px-4 mt-2">
+                                <a t-attf-href="/my/task/reopen/#{task.id}" class="btn btn-light text-danger fw-bold rounded-pill px-4 mt-2 shadow-sm">
                                     <i class="fa fa-refresh me-1"/> Re-open Task
                                 </a>
                             </div>
@@ -611,15 +611,6 @@
                                             </t>
                                             <t t-else="">None</t>
                                         </span>
-                                    </li>
-                                    <li class="list-group-item py-3">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <span class="text-muted"><i class="fa fa-line-chart me-2"></i> Progress</span>
-                                            <span class="fw-bold text-primary"><t t-esc="int(task.progress)"/>%</span>
-                                        </div>
-                                        <div class="progress" style="height: 12px; border-radius: 6px;">
-                                            <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" role="progressbar" t-attf-style="width: #{task.progress}%" t-att-aria-valuenow="task.progress" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
                                     </li>
                                 </ul>
                             </div>
