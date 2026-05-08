@@ -10,3 +10,6 @@ class ProjectTask(models.Model):
     user_ids = fields.Many2many('res.users', string='Assignees', 
                                 domain="['|', ('share', '=', False), ('groups_id', 'in', [7])]",
                                 help="The internal or portal users assigned to this task.")
+    # Task start tracking for portal
+    is_task_started = fields.Boolean(string='Is Started', default=False, tracking=True)
+    task_start_time = fields.Datetime(string='Start Time', tracking=True)

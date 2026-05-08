@@ -230,27 +230,49 @@ class EmployeePortal(CustomerPortal):
         if not task:
             return request.redirect('/my/tasks')
         
+        # Calculate elapsed time if started
+        elapsed_time = ""
+        if task.is_task_started and task.task_start_time:
+            diff = fields.Datetime.now() - task.task_start_time
+            hours, remainder = divmod(diff.total_seconds(), 3600)
+            minutes, seconds = divmod(remainder, 60)
+            elapsed_time = "%02d:%02d:%02d" % (hours, minutes, seconds)
+
         values = {
             'employee': employee,
             'task': task,
             'page_name': 'tasks',
+            'elapsed_time': elapsed_time,
         }
         return request.render("All_in_one_employee_portal.portal_my_task_detail", values)
 
-    @http.route(['/my/task/change_state/<int:task_id>'], type='http', auth="user", methods=['POST'], website=True)
-    def portal_my_task_change_state(self, task_id, state, **kw):
+    @http.route(['/my/task/start/<int:task_id>'], type='http', auth="user", website=True)
+    def portal_my_task_start(self, task_id, **kw):
         employee = request.env.user.employee_id
-        if not employee:
-            return request.redirect('/my')
-        
         task = request.env['project.task'].sudo().search([
             ('id', '=', task_id),
             ('employee_id', '=', employee.id)
         ], limit=1)
-        
-        if task:
-            task.sudo().write({'state': state})
-            
+        if task and not task.is_task_started:
+            task.sudo().write({
+                'is_task_started': True,
+                'task_start_time': fields.Datetime.now(),
+                'state': '02_changes_requested' # Or any "In Progress" equivalent stage
+            })
+        return request.redirect('/my/task/%s' % task_id)
+
+    @http.route(['/my/task/finish/<int:task_id>'], type='http', auth="user", website=True)
+    def portal_my_task_finish(self, task_id, **kw):
+        employee = request.env.user.employee_id
+        task = request.env['project.task'].sudo().search([
+            ('id', '=', task_id),
+            ('employee_id', '=', employee.id)
+        ], limit=1)
+        if task and task.is_task_started:
+            task.sudo().write({
+                'is_task_started': False,
+                'state': '1_done'
+            })
         return request.redirect('/my/task/%s' % task_id)
 
     @http.route(['/my/timesheets'], type='http', auth="user", website=True)
