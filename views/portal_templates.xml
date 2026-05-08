@@ -543,7 +543,49 @@
 
                     <!-- Sidebar Content -->
                     <div class="col-lg-4">
-                        <!-- Task Stats Card -->
+                        <!-- Task Control Card (The Red Box) - NOW ON TOP -->
+                        <div class="card shadow-sm border-0 bg-danger text-white p-4 text-center mb-4">
+                            <!-- State: Not Started -->
+                            <div t-if="not task.is_task_started and task.state != '1_done'">
+                                <i class="fa fa-play-circle fa-3x mb-3 text-white"></i>
+                                <h5 class="fw-bold text-white">Ready to Start?</h5>
+                                <p class="small opacity-75">Click start to begin tracking your time on this task.</p>
+                                <a t-attf-href="/my/task/start/#{task.id}" class="btn btn-light btn-lg rounded-pill px-5 fw-bold text-danger mt-2 shadow-sm border-0">
+                                    <i class="fa fa-play me-2"/> START TASK
+                                </a>
+                            </div>
+
+                            <!-- State: In Progress -->
+                            <div t-elif="task.is_task_started">
+                                <div class="timer-display mb-3">
+                                    <h2 class="fw-bold mb-0 text-white" id="task_timer"><t t-esc="elapsed_time"/></h2>
+                                    <span class="small opacity-75">TIME ELAPSED</span>
+                                </div>
+                                <h5 class="fw-bold text-white">Task in Progress</h5>
+                                <a t-attf-href="/my/task/finish/#{task.id}" class="btn btn-warning btn-lg rounded-pill px-5 fw-bold mt-2 shadow-sm border-0 text-dark">
+                                    <i class="fa fa-stop-circle me-2"/> FINISH TASK
+                                </a>
+                            </div>
+
+                            <!-- State: Completed -->
+                            <div t-else="">
+                                <i class="fa fa-check-circle fa-3x mb-3 text-white"></i>
+                                <h5 class="fw-bold text-white">Task Completed</h5>
+                                <p class="small opacity-75">This task has been marked as finished.</p>
+                                <a t-attf-href="/my/task/reopen/#{task.id}" class="btn btn-outline-light btn-sm rounded-pill px-4 mt-2">
+                                    <i class="fa fa-refresh me-1"/> Re-open Task
+                                </a>
+                            </div>
+
+                            <hr class="border-white opacity-25 my-4"/>
+                            <div class="small">
+                                <a href="/my/timesheets" class="text-white text-decoration-none opacity-75">
+                                    <i class="fa fa-history me-1"/> View Work History
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Task Stats Card - NOW BELOW -->
                         <div class="card shadow-sm border-0 mb-4 overflow-hidden">
                             <div class="card-header bg-primary text-white border-0 py-3">
                                 <h5 class="mb-0 fw-bold">Task Details</h5>
@@ -580,34 +622,6 @@
                                         </div>
                                     </li>
                                 </ul>
-                            </div>
-                        </div>
-
-                        <!-- Task Control Card (The Red Box) -->
-                        <div class="card shadow-sm border-0 bg-danger text-white p-4 text-center mb-4">
-                            <div t-if="not task.is_task_started">
-                                <i class="fa fa-play-circle fa-3x mb-3 text-white"></i>
-                                <h5 class="fw-bold text-white">Ready to Start?</h5>
-                                <p class="small opacity-75">Click start to begin tracking your time on this task.</p>
-                                <a t-attf-href="/my/task/start/#{task.id}" class="btn btn-light btn-lg rounded-pill px-5 fw-bold text-danger mt-2 shadow-sm">
-                                    <i class="fa fa-play me-2"/> START TASK
-                                </a>
-                            </div>
-                            <div t-else="">
-                                <div class="timer-display mb-3">
-                                    <h2 class="fw-bold mb-0 text-white" id="task_timer"><t t-esc="elapsed_time"/></h2>
-                                    <span class="small opacity-75">TIME ELAPSED</span>
-                                </div>
-                                <h5 class="fw-bold text-white">Task in Progress</h5>
-                                <a t-attf-href="/my/task/finish/#{task.id}" class="btn btn-success btn-lg rounded-pill px-5 fw-bold mt-2 shadow-sm">
-                                    <i class="fa fa-check-circle me-2"/> FINISH TASK
-                                </a>
-                            </div>
-                            <hr class="border-white opacity-25 my-4"/>
-                            <div class="small">
-                                <a href="/my/timesheets" class="text-white text-decoration-none opacity-75">
-                                    <i class="fa fa-history me-1"/> View Task History
-                                </a>
                             </div>
                         </div>
                     </div>

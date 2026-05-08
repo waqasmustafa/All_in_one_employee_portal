@@ -269,9 +269,39 @@ class EmployeePortal(CustomerPortal):
             ('employee_id', '=', employee.id)
         ], limit=1)
         if task and task.is_task_started:
+            # Calculate duration in hours
+            start_time = task.task_start_time
+            end_time = fields.Datetime.now()
+            duration_seconds = (end_time - start_time).total_seconds()
+            duration_hours = max(0.01, duration_seconds / 3600.0) # Minimum 0.01 hour to avoid 0
+            
+            # Create Timesheet Entry Automatically
+            request.env['account.analytic.line'].sudo().create({
+                'name': 'Portal: Completed Task',
+                'task_id': task.id,
+                'project_id': task.project_id.id,
+                'employee_id': employee.id,
+                'unit_amount': duration_hours,
+                'date': fields.Date.today(),
+            })
+
             task.sudo().write({
                 'is_task_started': False,
-                'state': '1_done'
+                'state': '1_done' # Moved to Done
+            })
+        return request.redirect('/my/task/%s' % task_id)
+
+    @http.route(['/my/task/reopen/<int:task_id>'], type='http', auth="user", website=True)
+    def portal_my_task_reopen(self, task_id, **kw):
+        employee = request.env.user.employee_id
+        task = request.env['project.task'].sudo().search([
+            ('id', '=', task_id),
+            ('employee_id', '=', employee.id)
+        ], limit=1)
+        if task:
+            task.sudo().write({
+                'state': '01_in_progress',
+                'is_task_started': False
             })
         return request.redirect('/my/task/%s' % task_id)
 
